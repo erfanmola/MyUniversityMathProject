@@ -1,0 +1,41 @@
+@media only screen and (max-width: 768px) {
+
+    body::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    html {
+        font-size: 14px;
+    }
+
+    .holder {
+        width: 96% !important;
+        padding: 12px !important;
+    }
+
+    #container-home {
+
+        > ul {
+            grid-template-columns: 1fr 1fr !important;
+        }
+
+    }
+
+    #container-map {
+        padding: 0 !important;
+    }
+
+    .section {
+
+        #story {
+            gap: 12px !important;
+
+            > h2 {
+                font-size: 1.325rem !important;
+            }
+
+        }
+
+    }
+
+}
