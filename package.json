@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@svg-drawing/core": "^5.0.1-beta.0",
+    "roughjs": "^4.5.2",
     "sass": "^1.57.1",
     "toastify-js": "^1.12.0",
     "vite-plugin-pwa": "^0.14.1",
