@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-import HomeView     from '../views/Home.vue';
+import HomeView        from '../views/Home.vue';
 import MapColoringView from '../views/MapColoring/Index.vue';
+import BridgesView     from '../views/Bridges/Index.vue';
 
 let routes = [
     {
@@ -18,6 +19,14 @@ let routes = [
         component: MapColoringView,
         meta: { 
             title: "رنگ‌آمیزی نقشه",
+        },
+    },
+    {
+        path: '/Bridges',
+        name: 'Bridges',
+        component: BridgesView,
+        meta: { 
+            title: "پل‌های کونیگسبرگ",
         },
     },
 ];

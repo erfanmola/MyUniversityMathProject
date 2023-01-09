@@ -17,6 +17,13 @@
                 </routerLink>
             </li>
 
+            <li>
+                <routerLink to="/Bridges">
+                    <i class="icon-map"></i>
+                    <h2>پل‌های کونیگسبرگ</h2>
+                </routerLink>
+            </li>
+
         </ul>
 
     </section>
@@ -36,6 +43,7 @@
             width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
+            grid-gap: 24px;
 
             > li > a {
                 display: flex;
