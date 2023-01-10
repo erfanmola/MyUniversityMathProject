@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@svg-drawing/core": "^5.0.1-beta.0",
+    "element-to-path": "^1.2.1",
     "parse-svg-path": "^0.1.2",
+    "path-intersection": "^2.2.1",
     "roughjs": "^4.5.2",
     "sass": "^1.57.1",
     "scale-svg-path": "^0.0.1",

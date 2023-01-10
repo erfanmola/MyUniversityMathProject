@@ -3,10 +3,12 @@
     import Footer from '../../sections/Footer.vue';
     import { ref, onMounted, onUnmounted } from 'vue';
     import { SvgDrawing } from '@svg-drawing/core';
-    
-    const VisualizeCanvas = true;
-
-    const EnteredBridge = ref(false);
+    import ParsePath from 'parse-svg-path';
+    import ScalePath from 'scale-svg-path';
+    import SerializePath from 'serialize-svg-path';
+    import intersect from 'path-intersection';
+    import toPath from 'element-to-path';
+    import Utils from '../../utils';
 
     const ErrorOccured = ref(false);
 
@@ -30,17 +32,46 @@
 
     let ValidBridges = ref([]);
 
-    let draw, interval, canvas;
+    let draw, interval, AspectRatio, WaterPath;
 
-    const SVGToImageSrc = (svg) => {
+    let Bridges = ref([]);
+    let BridgesCalculated = ref([]);
 
-        return 'data:image/svg+xml;base64,' + window.btoa(new XMLSerializer().serializeToString(svg));
+    let BridgePathsCalculated = ref([]);
+
+    const CalculateValues = () => {
+
+        AspectRatio = document.querySelector('#Canvas > svg').width.baseVal.value / 640;
+        WaterPath   = SerializePath(ScalePath(ParsePath(WaterPaths[ActiveMap.value]), AspectRatio));
+
+        Bridges.value = [];
+        BridgesCalculated.value = [];
+        BridgePathsCalculated.value = [];
+
+        BridgePaths[ActiveMap.value].forEach((Bridge) => {
+
+            const path = toPath({
+                type: 'element',
+                name: 'rect',
+                attributes: {
+                    x: Bridge[0],
+                    y: Bridge[1],
+                    width: Bridge[2],
+                    height: Bridge[3],
+                }
+            });
+
+            Bridges.value.push(path);
+            BridgesCalculated.value.push(SerializePath(ScalePath(ParsePath(path), AspectRatio)));
+            BridgePathsCalculated.value.push(Bridge.map((item) => { return item * AspectRatio; }));
+
+            console.log(intersect(path, WaterPath));
+
+        });
 
     };
 
     onMounted(() => {
-
-        canvas = document.getElementById('myCanvas');
 
         draw = new SvgDrawing(document.getElementById('Canvas'), {
             penColor: '#454545',
@@ -56,75 +87,79 @@
 
         setTimeout(() => {
 
-            interval = setInterval(HandleCycle, 250);
+            CalculateValues();
+
+            interval = setInterval(HandleCycle, 150);
 
         });
 
     });
 
+    window.onresize = CalculateValues;
+
     const HandleCycle = () => {
 
-        const ctx = canvas.getContext("2d");
-        
-        if (VisualizeCanvas) {
-            
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        document.querySelectorAll('#Canvas > svg > path').forEach((line, index) => {
 
-        }
+            const LinePath = line.getAttribute('d') ?? null;
 
-        const AspectRatio = document.querySelector('#Canvas > svg').width.baseVal.value / 640;
+            if (LinePath) {
 
-        ctx.canvas.width  = document.querySelector('#Canvas > svg').width.baseVal.value;
-        ctx.canvas.height = document.querySelector('#Canvas > svg').height.baseVal.value;
+                if (false && intersect(WaterPath, LinePath).length > 0) {
 
-        if (VisualizeCanvas) {
+                    ResetError("افتادی توی رودخونه");
 
-            const MapImage = new Image();
-            MapImage.src = SVGToImageSrc(document.getElementById(`${ ActiveMap.value }Bridges`));
+                }else{
 
-            MapImage.onload = () => {
-
-                ctx.drawImage(MapImage, 0, 0);
-
-                const path = new Path2D(WaterPaths[ActiveMap.value]);
-                ctx.fillStyle = '#00ffff';
-                ctx.fill(path);
-
-            };
-
-        }
-
-        document.querySelectorAll('#Canvas svg path').forEach((element, index) => {
-            
-            if (element.getAttribute('d')) {
-
-                const path = new Path2D(element.getAttribute('d'));
-                
-                if (VisualizeCanvas) {
-
-                    ctx.strokeStyle = '#ff0000';
-                    ctx.lineWidth = 8;
-                    ctx.stroke(path);
-
-                }
-
-                BridgePaths[ActiveMap.value].forEach((Bridge, BridgeIndex) => {
-                    
-                    if (!(ValidBridges.value.includes(BridgeIndex))) {
+                    BridgesCalculated.value.forEach((bridge, bridgeId) => {
+                        
+                        const BridgePathCalculated = BridgePathsCalculated.value[bridgeId];
 
                         let status = [false, false];
 
-                        if (Bridge[4]) {
+                        const intersections = intersect(bridge, LinePath);
 
-                            for (let i = Math.round(Bridge[0] * AspectRatio); i <= Math.round((Bridge[0] + Bridge[2]) * AspectRatio); i++) {
+                        if (intersections.length <= 2) {
 
-                                if (ctx.isPointInStroke(path, i, Math.round(Bridge[1] * AspectRatio))) {
+                            if (!(ValidBridges.value.includes(bridgeId))) {
 
-                                    status[0] = true;
+                                if (BridgePathCalculated[4]) {
 
-                                }else if (ctx.isPointInStroke(path, i, Math.round((Bridge[1] + Bridge[3]) * AspectRatio))) {
+                                    intersections.forEach((collision) => {
 
-                                    status[1] = true;
+                                        if (Math.round(collision['bez1'][0]) === Math.round(BridgePathCalculated[0]) && Math.round(collision['bez1'][1]) === Math.round(BridgePathCalculated[1])) {
+
+                                            status[0] = true;
+
+                                        }else if (Math.round(collision['bez1'][0]) === Math.round(BridgePathCalculated[0] + BridgePathCalculated[2]) && Math.round(collision['bez1'][1]) === Math.round(BridgePathCalculated[1] + BridgePathCalculated[3])) {
+
+                                            status[1] = true;
+
+                                        }
+
+                                    });
+
+                                }else{
+
+                                    intersections.forEach((collision) => {
+
+                                        if (Math.round(collision['bez1'][0]) === Math.round(BridgePathCalculated[0]) && Math.round(collision['bez1'][1]) === Math.round(BridgePathCalculated[1] + BridgePathCalculated[3])) {
+
+                                            status[0] = true;
+
+                                        }else if (Math.round(collision['bez1'][0]) === Math.round(BridgePathCalculated[0] + BridgePathCalculated[2]) && Math.round(collision['bez1'][1]) === Math.round(BridgePathCalculated[1])) {
+
+                                            status[1] = true;
+
+                                        }
+
+                                    });
+
+                                }
+
+                                if (status[0] && status[1]) {
+
+                                    ValidBridges.value.push(bridgeId);
 
                                 }
 
@@ -132,35 +167,13 @@
 
                         }else{
 
-                            for (let i = Math.round(Bridge[1] * AspectRatio); i <= Math.round((Bridge[1] + Bridge[3]) * AspectRatio); i++) {
-
-                                if (ctx.isPointInStroke(path, Math.round(Bridge[0] * AspectRatio), i)) {
-
-                                    status[0] = true;
-
-                                }else if (ctx.isPointInStroke(path, Math.round((Bridge[0] + Bridge[2]) * AspectRatio), i)) {
-
-                                    status[1] = true;
-
-                                }
-
-                            }
+                            ResetError("پل نمی‌تونه تکراری باشه");
 
                         }
 
-                        if (status[0] && status[1]) {
+                    });
 
-                            if (!(ValidBridges.value.includes(BridgeIndex))) {
-
-                                ValidBridges.value.push(BridgeIndex);
-
-                            }
-
-                        }
-
-                    }
-
-                });
+                }
 
             }
 
@@ -172,10 +185,28 @@
 
     const ResetMap = () => {
 
+        clearInterval(interval);
+
         draw.clear();
-        ValidBridges.value = [];
         ErrorOccured.value = false;
-        EnteredBridge.value = false;
+
+        setTimeout(() => {
+        
+            ValidBridges.value = [];
+
+            interval = setInterval(HandleCycle, 150);
+
+        }, 150);
+
+    };
+    
+    const ResetError = (reason = "خطا") => {
+
+        ResetMap();
+        ErrorOccured.value = true;
+        Utils.Toast(reason);
+
+        setTimeout(() => { ErrorOccured.value = false; }, 1000);
 
     };
 </script>
@@ -197,15 +228,9 @@
             </p>
         </div>
 
-        {{  ValidBridges }}
-
         <div id="container-map-bridges">
 
             <svg id="Map1" viewBox="0 0 640 400" class="map drawing-pointer noselect" style="touch-action: none;">
-                <path class="water" d="M521,106l64-7l55,0.7V66.1L576,61l-58,10h-87l-86,6l-80-9l-98,3l-19,15v62v49l-14,51l-66,4l-68-6.9V284h37
-                l61-1l68,1l64-6l62-6l57,1l21,1l11,17l18,32l40,28l45,6h45l48-15l41-19l22-6.4v-41.2l-26,7.7l-47,25l-51,15l-56-5l-33-28v-46l10-37
-                l9-46l-1-40l10-12L521,106z M414,147l-10,41l-5,38l-12,14h-26l-40-3h-50l-43,1l-47,8l-4-15l8-37l-1-47l1-33l18-12l54-2l53,6l50,1
-                l37-3l18,10L414,147z"></path>
                 <rect x="244" y="111" transform="matrix(0.9986 5.233596e-02 -5.233596e-02 0.9986 7.1404 -13.6394)" class="house" width="40" height="37"></rect>
                 <rect x="247.3" y="195.8" transform="matrix(0.9998 -1.745241e-02 1.745241e-02 0.9998 -3.6299 4.5828)" class="house" width="27" height="29"></rect>
                 <rect x="191.5" y="156.5" transform="matrix(0.9994 -3.489950e-02 3.489950e-02 0.9994 -5.8436 7.2585)" class="house" width="27" height="29"></rect>
@@ -280,7 +305,8 @@
                 <rect x="37.7" y="111.8" transform="matrix(-0.9991 4.172154e-02 -4.172154e-02 -0.9991 95.4948 241.686)" class="house" width="15" height="20"></rect>
                 <rect x="174.7" y="6.8" transform="matrix(6.637418e-02 0.9978 -0.9978 6.637418e-02 186.9327 -166.1018)" class="house" width="15" height="20"></rect>
                 
-                <rect v-for="(bridge, key) in BridgePaths[ActiveMap]" :class="[ 'bridge', ValidBridges.includes(key) ? 'green' : '', ErrorOccured ? 'red' : '' ]" :x="bridge[0]" :y="bridge[1]" :width="bridge[2]" :height="bridge[3]" :transform="bridge[5]"></rect>
+                <path class="water" :d="WaterPaths[ActiveMap]"></path>
+                <path v-for="(bridge, key) in Bridges" :class="[ 'bridge', ValidBridges.includes(key) ? 'green' : '', ErrorOccured ? 'red' : '' ]" :d="bridge"></path>
             </svg>
 
             <div id="Canvas">
@@ -290,16 +316,6 @@
         </div>
 
     </section>
-
-    <canvas id="myCanvas"></canvas>
-
-    <div style="display: none !important;">
-
-        <svg :id="`${ActiveMap}Bridges`" viewBox="0 0 640 400" style="width: 100%">
-            <rect v-for="bridge in BridgePaths[ActiveMap]" :x="bridge[0]" :y="bridge[1]" :width="bridge[2]" :height="bridge[3]" :transform="bridge[5]"></rect>
-        </svg>
-
-    </div>
 
     <Footer />
 </template>
