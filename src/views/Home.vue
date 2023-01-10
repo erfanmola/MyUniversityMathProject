@@ -19,7 +19,7 @@
 
             <li>
                 <routerLink to="/Bridges">
-                    <i class="icon-map"></i>
+                    <i class="icon-bridge"></i>
                     <h2>پل‌های کونیگسبرگ</h2>
                 </routerLink>
             </li>

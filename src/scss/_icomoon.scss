@@ -1,8 +1,14 @@
-.icon-logo:before {
+.icon-bridge:before {
+    content: "\e909";
+  }
+  .icon-logo:before {
     content: "\e906";
   }
   .icon-map:before {
     content: "\e905";
+  }
+  .icon-check-circle:before {
+    content: "\e907";
   }
   .icon-frown:before {
     content: "\e903";
@@ -18,5 +24,8 @@
   }
   .icon-sun:before {
     content: "\e902";
+  }
+  .icon-x-circle:before {
+    content: "\e908";
   }
   

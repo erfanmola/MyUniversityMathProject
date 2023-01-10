@@ -17,6 +17,12 @@
     --bg-card-hover: #f9f9f9;
     --shadow-card: 0 4px 5px 0 rgba(170,179,217,.175);
     --accent: #D32F2F;
+    --bridge-house: #eaeaea;
+    --bridge-bridge: #FF9800;
+    --bridge-bridge-green: #4CAF50;
+    --bridge-bridge-red: #F44336;
+    --bridge-water: #2196F3;
+    --draw-color: #454545;
 }
 
 body.dark {
@@ -33,4 +39,8 @@ body.dark {
     --coloring-island: #203040;
     --coloring-province: #606060;
     --coloring-water: #3F51B5;
+    --bridge-house: #757575;
+    --draw-color: #e0e0e0;
+    --bridge-water: #1565C0;
+    --bridge-bridge: #F57C00;
 }
