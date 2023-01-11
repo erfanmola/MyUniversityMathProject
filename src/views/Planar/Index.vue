@@ -2,7 +2,7 @@
     import Header from '../../sections/Header.vue';
     import Footer from '../../sections/Footer.vue';
     import { ref, onMounted, onUnmounted, watch } from 'vue';
-    import { SvgDrawing } from '@svg-drawing/core';
+    import { Path, SvgDrawing } from '@svg-drawing/core';
     import ParsePath from 'parse-svg-path';
     import ScalePath from 'scale-svg-path';
     import SerializePath from 'serialize-svg-path';
@@ -16,9 +16,36 @@
 
     let draw, interval, AspectRatio;
 
+    let CirlcesData = [
+        [ 18, 12, 4, "red" ],
+        [ 42, 12, 4, "green" ],
+        [ 66, 12, 4, "blue" ],
+        [ 18, 45, 4, "orange" ],
+        [ 42, 45, 4, "salmon" ],
+        [ 66, 45, 4, "purple" ],
+    ];
+
+    let CompletePaths = ref([]);
+
+    let CirclesPath = ref([]);
+
     const CalculateValues = () => {
 
-        AspectRatio = document.querySelector('#CanvasPlanar > svg').width.baseVal.value / 640;
+        AspectRatio = document.querySelector('#CanvasPlanar > svg').width.baseVal.value / 300;
+
+        CirclesPath.value = CirlcesData.map((data) => {
+
+            return SerializePath(ScalePath(ParsePath(toPath({
+                type: 'element',
+                name: 'circle',
+                attributes: {
+                    cx: data[0],
+                    cy: data[1],
+                    r: data[2],
+                },
+            })), AspectRatio));
+
+        });
 
     };
 
@@ -50,15 +77,52 @@
 
     const HandleCycle = () => {
 
-        document.querySelectorAll('#CanvasPlanar > svg > path').forEach((line, index) => {
+        let LinePaths = [];
+
+        const Paths = document.querySelectorAll('#CanvasPlanar > svg > path');
+
+        Paths.forEach((line, index) => {
 
             const LinePath = line.getAttribute('d') ?? null;
 
             if (LinePath) {
 
+                LinePaths.push(LinePath);
+
             }
 
         });
+
+        let Crosses = false;
+
+        LinePaths.forEach((Path1, Path1Key) => {
+
+            LinePaths.forEach((Path2, Path2Key) => {
+
+                if (!(Crosses) && Path1 !== Path2 && intersect(Path1, Path2).length > 0) {
+
+                    draw.drawEnd();
+
+                    Crosses = true;
+
+                    Paths[Path1Key].classList.add('crossed-line-b');
+                    Paths[Path2Key].classList.add('crossed-line-a');
+
+                }
+
+            });
+
+        });
+
+        if (Crosses) {
+            
+            ResetError("خط ها نباید از همدیگه رد بشن");
+
+        }else{
+
+            // TODO: Go On
+
+        }
 
     };
 
@@ -82,6 +146,17 @@
         }, TickRate);
 
     };
+
+    const ResetError = (reason = "خطا") => {
+
+        clearInterval(interval);
+
+        Utils.Toast(reason);
+
+        setTimeout(ResetMap, 1500);
+
+    };
+
 </script>
 
 <template>
@@ -96,13 +171,14 @@
         <div id="story">
             <h2>لوله‌کشی خانه‌ها</h2>
 
-            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد وزمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی سوالات پیوسته اهل دنیای موجود طراحی اساسا مورد استفاده قرار گیرد.</p>
-
+            <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و</p>
         </div>
 
         <div id="container-map-planar">
 
-            <svg :id="ActiveMap" viewBox="0 0 640 400">
+            <svg id="PlanarSVG" viewBox="0 0 300 200">
+
+                <path v-for="(path, index) in CirclesPath" :d="path" :style="`fill: ${ CirlcesData[index][3] }`"></path>
 
             </svg>
 
@@ -141,5 +217,17 @@
             }
         }
 
+    }
+
+    #CanvasPlanar svg path {
+        stroke: var(--draw-color);
+    }
+
+    .crossed-line-a {
+        stroke: red !important;
+    }
+
+    .crossed-line-b {
+        stroke: blue !important;
     }
 </style>
