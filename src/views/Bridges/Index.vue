@@ -166,6 +166,8 @@
 
                 if (WaterIntersections.length > 0) {
 
+                    draw.drawEnd();
+
                     ResetError("افتادی توی رودخونه");
 
                 }else{
@@ -293,6 +295,8 @@
     watch(ValidBridges, () => {
 
         if (ValidBridges.value.length === BridgePaths[ActiveMap.value].length) {
+
+            draw.drawEnd();
 
             Accomplishments.value[ActiveMap.value] = true;
 
