@@ -1,8 +1,9 @@
+<!-- TODO: Each Time a random color -->
 <script setup>
     import Header from '../../sections/Header.vue';
     import Footer from '../../sections/Footer.vue';
     import { ref, onMounted, onUnmounted, watch } from 'vue';
-    import { Path, SvgDrawing } from '@svg-drawing/core';
+    import { Line, Path, SvgDrawing } from '@svg-drawing/core';
     import ParsePath from 'parse-svg-path';
     import ScalePath from 'scale-svg-path';
     import SerializePath from 'serialize-svg-path';
@@ -17,25 +18,29 @@
     let draw, interval, AspectRatio;
 
     let CirlcesData = [
-        [ 18, 12, 4, "red" ],
-        [ 42, 12, 4, "green" ],
-        [ 66, 12, 4, "blue" ],
-        [ 18, 45, 4, "orange" ],
-        [ 42, 45, 4, "salmon" ],
-        [ 66, 45, 4, "purple" ],
+        [ 60,  40, 16 ],
+        [ 150, 40, 16 ],
+        [ 240, 40, 16 ],
+        [ 60,  160, 16 ],
+        [ 150, 160, 16 ],
+        [ 240, 160, 16 ],
     ];
 
     let CompletePaths = ref([]);
 
     let CirclesPath = ref([]);
+    let CirclesPathCalculated = ref([]);
 
     const CalculateValues = () => {
 
+        CirclesPath.value = [];
+        CirclesPathCalculated.value = [];
+
         AspectRatio = document.querySelector('#CanvasPlanar > svg').width.baseVal.value / 300;
 
-        CirclesPath.value = CirlcesData.map((data) => {
+        CirlcesData.forEach((data) => {
 
-            return SerializePath(ScalePath(ParsePath(toPath({
+            const path = toPath({
                 type: 'element',
                 name: 'circle',
                 attributes: {
@@ -43,7 +48,10 @@
                     cy: data[1],
                     r: data[2],
                 },
-            })), AspectRatio));
+            });
+
+            CirclesPath.value.push(path);
+            CirclesPathCalculated.value.push(SerializePath(ScalePath(ParsePath(path), AspectRatio)));
 
         });
 
@@ -105,9 +113,6 @@
 
                     Crosses = true;
 
-                    Paths[Path1Key].classList.add('crossed-line-b');
-                    Paths[Path2Key].classList.add('crossed-line-a');
-
                 }
 
             });
@@ -120,7 +125,28 @@
 
         }else{
 
-            // TODO: Go On
+            LinePaths.forEach((LinePath) => {
+
+                for (let i = 0; i < 3; i ++) {
+
+                    for (let j = 3; j < 6; j++) {
+
+                        if (!(CompletePaths.value.includes(`${ i }${ j }`))) {
+
+                            if ((intersect(LinePath, CirclesPathCalculated.value[i]).length > 0) && (intersect(LinePath, CirclesPathCalculated.value[j]).length > 0)) {
+
+                                CompletePaths.value.push(`${ i }${ j }`);
+                                draw.drawEnd();
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            });
 
         }
 
@@ -138,6 +164,8 @@
 
         draw.clear();
         ErrorOccured.value = false;
+
+        CompletePaths.value = [];
 
         setTimeout(() => {
         
@@ -173,6 +201,8 @@
 
             <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و</p>
         </div>
+
+        {{ CompletePaths  }}
 
         <div id="container-map-planar">
 
@@ -221,13 +251,5 @@
 
     #CanvasPlanar svg path {
         stroke: var(--draw-color);
-    }
-
-    .crossed-line-a {
-        stroke: red !important;
-    }
-
-    .crossed-line-b {
-        stroke: blue !important;
     }
 </style>
