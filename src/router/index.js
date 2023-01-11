@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView        from '../views/Home.vue';
 import MapColoringView from '../views/MapColoring/Index.vue';
 import BridgesView     from '../views/Bridges/Index.vue';
+import PlanarView      from '../views/Planar/Index.vue';
 
 let routes = [
     {
@@ -27,6 +28,14 @@ let routes = [
         component: BridgesView,
         meta: { 
             title: "پل‌های کونیگسبرگ",
+        },
+    },
+    {
+        path: '/Planar',
+        name: 'Planar',
+        component: PlanarView,
+        meta: { 
+            title: "لوله‌کشی خانه‌ها",
         },
     },
 ];

@@ -24,6 +24,13 @@
                 </routerLink>
             </li>
 
+            <li>
+                <routerLink to="/Planar">
+                    <i class="icon-bridge"></i>
+                    <h2>لوله‌کشی خانه‌ها</h2>
+                </routerLink>
+            </li>
+
         </ul>
 
     </section>
