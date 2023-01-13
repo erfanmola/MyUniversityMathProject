@@ -59,7 +59,7 @@ let redirects = [
 routes = routes.concat(redirects);
 
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
+    history: createWebHistory(process.env.NODE_ENV === 'production' ? '/MyUniversityMathProject/' : '/'),
     routes
 });
 
