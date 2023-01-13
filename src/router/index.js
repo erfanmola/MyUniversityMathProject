@@ -59,8 +59,8 @@ let redirects = [
 routes = routes.concat(redirects);
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+    history: createWebHistory(process.env.BASE_URL),
+    routes
 });
 
 router.afterEach((to) => {
