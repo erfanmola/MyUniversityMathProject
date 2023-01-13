@@ -1,7 +1,7 @@
 const strings = {
-    developix: {
+    Erfan Mola: {
         fa: "دولوپیکس",
-        en: "Developix"
+        en: "Erfan Mola"
     },
     general: {
         title: {
