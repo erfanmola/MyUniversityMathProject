@@ -26,8 +26,15 @@
 
             <li>
                 <routerLink to="/Planar">
-                    <i class="icon-bridge"></i>
+                    <i class="icon-pipe"></i>
                     <h2>لوله‌کشی خانه‌ها</h2>
+                </routerLink>
+            </li>
+
+            <li>
+                <routerLink to="/Escape">
+                    <i class="icon-freedom"></i>
+                    <h2>مسیر آزادی</h2>
                 </routerLink>
             </li>
 

@@ -137,6 +137,12 @@
                                 CompletePaths.value.push(`${ i }${ j }`);
                                 draw.drawEnd();
 
+                                if (CompletePaths.value.length === 9) {
+
+                                    Utils.Toast("کلک می‌زنی ؟ (:");
+
+                                }
+
                             }
 
                         }

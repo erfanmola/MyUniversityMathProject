@@ -6,10 +6,29 @@ const Toast = (text, duration = 2000) => {
     
 };
 
+const DisableScrollFunction = (e) => {
+
+    e.preventDefault();
+    e.stopPropagation();
+
+};
+
 const Utils = {
 
     getThemeMode: () => { return window.localStorage.getItem('ThemeMode') ?? 'light'; },
     Toast: Toast,
+
+    DisableScroll: () => {
+
+        document.body.addEventListener('touchmove', DisableScrollFunction, { passive: false });
+
+    },
+
+    EnableScroll: () => {
+
+        document.body.removeEventListener('touchmove', DisableScrollFunction);
+
+    },
     
 };
 

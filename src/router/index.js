@@ -4,6 +4,7 @@ import HomeView        from '../views/Home.vue';
 import MapColoringView from '../views/MapColoring/Index.vue';
 import BridgesView     from '../views/Bridges/Index.vue';
 import PlanarView      from '../views/Planar/Index.vue';
+import EscapeView      from '../views/Escape/Index.vue';
 
 let routes = [
     {
@@ -36,6 +37,14 @@ let routes = [
         component: PlanarView,
         meta: { 
             title: "لوله‌کشی خانه‌ها",
+        },
+    },
+    {
+        path: '/Escape',
+        name: 'Escape',
+        component: EscapeView,
+        meta: { 
+            title: "مسیر آزادی",
         },
     },
 ];
