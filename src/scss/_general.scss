@@ -27,6 +27,8 @@ body {
     color: var(--text-color);
     min-height: 100vh;
     background: var(--bg);
+    user-select: none;
+    overscroll-behavior: none;
 }
 
 ::selection {

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@svg-drawing/core": "^5.0.1-beta.0",
+    "disable-scroll": "^0.6.0",
     "element-to-path": "^1.2.1",
     "parse-svg-path": "^0.1.2",
     "path-intersection": "^2.2.1",

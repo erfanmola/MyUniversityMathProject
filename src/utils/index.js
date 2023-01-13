@@ -1,16 +1,10 @@
 import Toastify from 'toastify-js';
+import disableScroll from 'disable-scroll';
 
 const Toast = (text, duration = 2000) => {
 
     Toastify({text: text, duration: duration, gravity: 'bottom', position: 'left', style: {background: 'var(--toast-bg)', color: 'var(--toast-color)'}}).showToast(); 
     
-};
-
-const DisableScrollFunction = (e) => {
-
-    e.preventDefault();
-    e.stopPropagation();
-
 };
 
 const Utils = {
@@ -20,13 +14,13 @@ const Utils = {
 
     DisableScroll: () => {
 
-        document.body.addEventListener('touchmove', DisableScrollFunction, { passive: false });
+        disableScroll.on();
 
     },
 
     EnableScroll: () => {
 
-        document.body.removeEventListener('touchmove', DisableScrollFunction);
+        disableScroll.off();
 
     },
     
