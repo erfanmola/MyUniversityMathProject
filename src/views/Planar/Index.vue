@@ -1,7 +1,7 @@
 <script setup>
     import Header from '../../sections/Header.vue';
     import Footer from '../../sections/Footer.vue';
-    import { ref, onMounted, onUnmounted, watch } from 'vue';
+    import { ref, onMounted, onUnmounted } from 'vue';
     import { Path, SvgDrawing } from '@svg-drawing/core';
     import ParsePath from 'parse-svg-path';
     import ScalePath from 'scale-svg-path';
@@ -60,7 +60,7 @@
 
         draw = new SvgDrawing(document.getElementById('CanvasPlanar'), {
             penColor: '#555555',
-            penWidth: 8,
+            penWidth: 6,
             curve: true,
             close: false,
             delay: 20,
@@ -204,7 +204,7 @@
         <div id="story">
             <h2>لوله‌کشی خانه‌ها</h2>
 
-            <p>توی یک شهر خیلی کوچک، سه تا خونه داریم و قصد داریم که به هر یک از این خونه‌ها آب و برق و گاز لوله‌کشی و سیم‌کشی کنیم، به‌طوریکه که هیچ یک از لوله‌ها و سیم‌ها از روی همدیگه عبور نکنند، در کادر زیر می‌تونید از هرکدوم از منابع یک لوله یا سیمی رو به سمت خونه مربوطه بکشید</p>
+            <p>توی یک شهر خیلی کوچک، سه تا خونه داریم و قصد داریم که به هر یک از این خونه‌ها آب و برق و گاز لوله‌کشی و سیم‌کشی کنیم، به‌طوریکه که هیچ یک از لوله‌ها و سیم‌ها از روی همدیگه عبور نکنند، در کادر زیر می‌تونید از هرکدوم از منابع یک لوله یا سیمی رو به سمت خونه مربوطه بکشید (برای تجربه ترسیم راحت‌تر، از دسکتاپ استفاده کنید)</p>
         </div>
 
         <div id="container-map-planar">

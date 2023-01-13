@@ -110,7 +110,7 @@
 
         draw = new SvgDrawing(document.getElementById('Canvas'), {
             penColor: '#555555',
-            penWidth: 10,
+            penWidth: 6,
             curve: true,
             close: false,
             delay: 20,
@@ -317,7 +317,7 @@
 
             <p>یکی از اولین ریاضیدان هایی که درمورد گراف‌ها و شبکه‌ها به‌صورت گسترده تحقیق کرد و ما رو بدبخت کرد، لئونارد اویلر بود، اویلر درمورد یکی از مسائل قدیمی تاریخ که مربوط به شهر کونیگسبرگ در نزدیکی دریای بالتیک بود، تحقیقات زیادی کرد</p>
 
-            <p>شهر کونیگسبرگ توسط رودخانه‌ای که از اون عبور می‌کنه به 4 بخش مختلف تقسیم می‌شه و این بخش‌ها با استفاده از 7 پل مختلف به‌یکدیگر متصل می‌شن و با استفاده از این پل‌ها می‌تونیم در کل شهر قدم بزنیم، اما مسئله‌ای که مطرح می‌شه این هست که : آیا می‌تونیم در شهر قدم بزنیم، به‌طوری که از تمامی پل‌ها بگذریم، به‌شرطی که از هر پل فقط یک‌بار بگذریم ؟ در کادر زیر می‌تونیم با کشیدن خطوط امتحان کنیم و ببینیم که می‌شه یا نمی‌شه :</p>
+            <p>شهر کونیگسبرگ توسط رودخانه‌ای که از اون عبور می‌کنه به 4 بخش مختلف تقسیم می‌شه و این بخش‌ها با استفاده از 7 پل مختلف به‌یکدیگر متصل می‌شن و با استفاده از این پل‌ها می‌تونیم در کل شهر قدم بزنیم، اما مسئله‌ای که مطرح می‌شه این هست که : آیا می‌تونیم در شهر قدم بزنیم، به‌طوری که از تمامی پل‌ها بگذریم، به‌شرطی که از هر پل فقط یک‌بار بگذریم ؟ در کادر زیر می‌تونیم با کشیدن خطوط امتحان کنیم و ببینیم که می‌شه یا نمی‌شه : (برای تجربه ترسیم راحت‌تر، از دسکتاپ استفاده کنید)</p>
         </div>
 
         <div id="container-bridges-frame">
@@ -689,7 +689,7 @@
 
                 <p>در ابتدا شهر رو به‌صورت گراف ترسیم می‌کنیم، گرافی که در اون بخش های مختلف شهر رو به‌عنوان راس(Vertex) و پل‌ها را به‌عنوان یال(Edge) در نظر می‌گیریم و نتیجه گرافی به‌شکل مقابل می‌شه :</p>
 
-                <svg style="height: auto;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 400" version="1.0"><use xlink:href="#a" width="500" height="400" transform="matrix(1 0 0 -1.0049 0 403.783)"/><path d="M35 201.62h434" style="fill:none;fill-opacity:.75;fill-rule:evenodd;stroke:var(--text-color);stroke-width:6.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"/><path id="a" d="M462 192 261 33s-33-9-90-9S63 37 51 90 35 198 35 198s60.936-14.038 121-57c68.03-48.66 93-99 93-99" style="fill:none;fill-opacity:.75;fill-rule:evenodd;stroke:var(--text-color);stroke-width:6.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"/><path id="b" d="M58 200a23 23 0 1 1-46 0 23 23 0 1 1 46 0z" style="fill:#E57373;fill-opacity:1;fill-rule:evenodd;stroke:#B71C1C;stroke-width:3.75;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" transform="translate(0 1.5)"/><use xlink:href="#b" width="500" height="400" transform="translate(432)"/><use xlink:href="#b" width="500" height="400" transform="translate(219.5 -168)"/><use xlink:href="#b" width="500" height="400" transform="translate(219.5 171)"/></svg>
+                <svg style="height: auto;width: 100%;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 500 400" version="1.0"><use xlink:href="#a" width="500" height="400" transform="matrix(1 0 0 -1.0049 0 403.783)"/><path d="M35 201.62h434" style="fill:none;fill-opacity:.75;fill-rule:evenodd;stroke:var(--text-color);stroke-width:6.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"/><path id="a" d="M462 192 261 33s-33-9-90-9S63 37 51 90 35 198 35 198s60.936-14.038 121-57c68.03-48.66 93-99 93-99" style="fill:none;fill-opacity:.75;fill-rule:evenodd;stroke:var(--text-color);stroke-width:6.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"/><path id="b" d="M58 200a23 23 0 1 1-46 0 23 23 0 1 1 46 0z" style="fill:#E57373;fill-opacity:1;fill-rule:evenodd;stroke:#B71C1C;stroke-width:3.75;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" transform="translate(0 1.5)"/><use xlink:href="#b" width="500" height="400" transform="translate(432)"/><use xlink:href="#b" width="500" height="400" transform="translate(219.5 -168)"/><use xlink:href="#b" width="500" height="400" transform="translate(219.5 171)"/></svg>
 
             </div>
 
