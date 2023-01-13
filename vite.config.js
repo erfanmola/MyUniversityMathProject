@@ -56,5 +56,6 @@ export default defineConfig({
                 404: './404.html'
             }
         }
-    }
+    },
+    base: process.env.NODE_ENV === 'production' ? '/MyUniversityMathProject/' : '/',
 });
